@@ -1,7 +1,7 @@
 import os
 import sys
 from typing import Literal, Dict, Optional
-
+import pathlib
 import fire
 
 
@@ -10,18 +10,21 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
 from utils.wrapper import StreamDiffusionWrapper
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+OUTPUT_DIR = os.path.join(CURRENT_DIR, "..", "..", "images", "outputs")
+pathlib.Path(OUTPUT_DIR).mkdir(parents=True, exist_ok=True)
 
 
 def main(
-    output: str = os.path.join(CURRENT_DIR, "..", "..", "images", "outputs", "output.png"),
-    model_id_or_path: str = "KBlueLeaf/kohaku-v2.1",
+    output: str = os.path.join(OUTPUT_DIR, "output.png"),
+    model_id_or_path: str = "stabilityai/sdxl-turbo",
     lora_dict: Optional[Dict[str, float]] = None,
     prompt: str = "1girl with brown dog hair, thick glasses, smiling",
     width: int = 512,
     height: int = 512,
-    acceleration: Literal["none", "xformers", "tensorrt"] = "xformers",
+    acceleration: Literal["none", "xformers", "tensorrt"] = "none",
     use_denoising_batch: bool = False,
     seed: int = 2,
+    device: str = "mps",
 ):
     
     """
@@ -49,6 +52,8 @@ def main(
         Whether to use denoising batch or not, by default False.
     seed : int, optional
         The seed, by default 2. if -1, use random seed.
+    device : str, optional
+        The device to use for image generation, by default "mps".
     """
 
     stream = StreamDiffusionWrapper(
@@ -64,11 +69,12 @@ def main(
         use_denoising_batch=use_denoising_batch,
         cfg_type="none",
         seed=seed,
+        device=device,
     )
 
     stream.prepare(
         prompt=prompt,
-        num_inference_steps=50,
+        num_inference_steps=25,
     )
 
     for _ in range(stream.batch_size - 1):
