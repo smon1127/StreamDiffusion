@@ -16,7 +16,7 @@ pathlib.Path(OUTPUT_DIR).mkdir(parents=True, exist_ok=True)
 
 def main(
     output: str = os.path.join(OUTPUT_DIR, "output.png"),
-    model_id_or_path: str = "stabilityai/sdxl-turbo",
+    model_id_or_path: str = "runwayml/stable-diffusion-v1-5",
     lora_dict: Optional[Dict[str, float]] = None,
     prompt: str = "1girl with brown dog hair, thick glasses, smiling",
     width: int = 512,
@@ -74,7 +74,7 @@ def main(
 
     stream.prepare(
         prompt=prompt,
-        num_inference_steps=25,
+        num_inference_steps=50,
     )
 
     for _ in range(stream.batch_size - 1):

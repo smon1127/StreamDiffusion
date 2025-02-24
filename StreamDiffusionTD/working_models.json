@@ -1,4 +1,5 @@
 [
     "stabilityai/sd-turbo",
-    "IDKiro/sdxs-512-dreamshaper"
+    "IDKiro/sdxs-512-dreamshaper",
+    "/Users/simon/Repos/StreamDiffusionTD/StreamDiffusionTD/models/Model/sd_xl_turbo_1.0_fp16.safetensors"
 ]
